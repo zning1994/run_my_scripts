@@ -1,0 +1,38 @@
+name: 'credite_card_best_custom_date'
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout from repo
+      uses: actions/checkout@main
+      with:
+        ref: main
+
+    - name: Checkout private tools
+      uses: actions/checkout@main
+      with:
+        repository: zning1994/credite_card_best_custom_date
+        branch: main
+        token: ${{ secrets.PRIVATE_TOEKEN }}
+        path: scripts
+    
+    - name: Install Python latest
+      uses: actions/setup-python@main
+      with:
+        python-version: '3.x'
+        architecture: 'x64'
+
+#     - name: Install dependencies
+#       run: |
+#         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+ 
+    - name: Doing fetch and convert
+      run: |
+        python credite_card_best_custom_date.py;
