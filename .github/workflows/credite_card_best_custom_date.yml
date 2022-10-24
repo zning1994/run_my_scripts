@@ -36,6 +36,7 @@ jobs:
 #       run: |
 #         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
  
-    - name: Doing fetch and convert
+    - name: Running Script(s)
       run: |
+        cd scripts;
         python credite_card_best_custom_date.py;
