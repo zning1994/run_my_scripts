@@ -1,9 +1,9 @@
 name: 'credite_card_best_custom_date'
 
 on:
-  push:
-    branches:
-      - main
+#   push:
+#     branches:
+#       - main
   schedule:
     - cron: '10 3 * * *'
 
