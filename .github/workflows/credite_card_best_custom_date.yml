@@ -40,3 +40,17 @@ jobs:
       run: |
         cd scripts;
         python credite_card_best_custom_date.py;
+        echo $(date "+%Y-%m-%d %H:%M:%S") >> credite_card_best_custom_date;
+
+    - name: Commit files
+      run: |
+        git config --local user.email "zhn038@gmail.com"
+        git config --local user.name "ZNing"
+        git add .
+        git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
+ 
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
