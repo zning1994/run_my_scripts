@@ -40,7 +40,7 @@ jobs:
       run: |
         cd scripts;
         python credite_card_best_custom_date.py;
-        echo $(date "+%Y-%m-%d %H:%M:%S") >> credite_card_best_custom_date;
+        cd .. && rm -rf scripts && echo $(date "+%Y-%m-%d %H:%M:%S") >> credite_card_best_custom_date;
 
     - name: Commit files
       run: |
