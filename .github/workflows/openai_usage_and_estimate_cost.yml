@@ -1,0 +1,59 @@
+name: 'openai_usage_and_estimate_cost'
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '10 3 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    environment: openai_usage
+
+    steps:
+    - name: Checkout from repo
+      uses: actions/checkout@main
+      with:
+        ref: main
+
+    - name: Checkout private tools
+      uses: actions/checkout@main
+      with:
+        repository: zning1994/get_openai_usage_and_estimate_cost
+        branch: main
+        token: ${{ secrets.PRIVATE_TOEKEN }}
+        path: scripts
+    
+    - name: Install Python latest
+      uses: actions/setup-python@main
+      with:
+        python-version: '3.x'
+        architecture: 'x64'
+
+    # - name: Install dependencies
+    #   run: |
+    #     if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+ 
+    - name: Running Script(s)
+      run: |
+        cd scripts;
+        python get_openai_usage_and_estimate_cost.py;
+        cd .. && rm -rf scripts && echo $(date "+%Y-%m-%d %H:%M:%S") >> openai_usage_and_estimate_cost;
+      env:
+        OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
+
+    - name: Commit files
+      run: |
+        git config --local user.email "zhn038@gmail.com"
+        git config --local user.name "ZNing"
+        git add .
+        git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
+ 
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
