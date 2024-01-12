@@ -44,6 +44,8 @@ jobs:
         cd .. && rm -rf scripts && echo $(date "+%Y-%m-%d %H:%M:%S") >> openai_usage_and_estimate_cost;
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        SMS_API_ID: ${{ secrets.SMS_API_ID }}
+        SMS_API_KEY: ${{ secrets.SMS_API_KEY }}
 
     - name: Commit files
       run: |
