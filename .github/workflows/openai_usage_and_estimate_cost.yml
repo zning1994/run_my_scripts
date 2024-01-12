@@ -43,7 +43,7 @@ jobs:
         python get_openai_usage_and_estimate_cost.py;
         cd .. && rm -rf scripts && echo $(date "+%Y-%m-%d %H:%M:%S") >> openai_usage_and_estimate_cost;
       env:
-        OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     - name: Commit files
       run: |
