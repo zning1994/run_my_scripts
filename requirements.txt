@@ -1,1 +1,2 @@
 tencentcloud-sdk-python
+requests
