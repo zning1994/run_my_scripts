@@ -1,9 +1,9 @@
-name: 'feishu_send_new_stocks'
+name: 'feishu_currency'
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   schedule:
     - cron: '*/30 * * * *'
 
