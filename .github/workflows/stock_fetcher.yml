@@ -1,0 +1,55 @@
+name: Stock Data Fetcher
+
+on:
+  schedule:
+    # 每个工作日的 UTC 时间 02:00 执行（北京时间 10:00）
+    - cron: '0 2 * * 1-5'
+  
+  # 允许手动触发
+  workflow_dispatch:
+
+jobs:
+  fetch-stock-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Create .env file
+      run: |
+        echo "TUSHARE_TOKEN=${{ secrets.TUSHARE_TOKEN }}" >> .env
+        echo "OSS_ACCESS_KEY_ID=${{ secrets.OSS_ACCESS_KEY_ID }}" >> .env
+        echo "OSS_ACCESS_KEY_SECRET=${{ secrets.OSS_ACCESS_KEY_SECRET }}" >> .env
+        echo "OSS_BUCKET_NAME=${{ secrets.OSS_BUCKET_NAME }}" >> .env
+        echo "OSS_ENDPOINT=${{ secrets.OSS_ENDPOINT }}" >> .env
+    
+    - name: Run stock data fetcher
+      run: |
+        python main.py
+    
+    - name: Upload logs as artifact
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: stock-fetcher-logs
+        path: stock_fetcher.log
+        retention-days: 30 
