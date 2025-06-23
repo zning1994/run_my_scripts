@@ -11,6 +11,8 @@ on:
 jobs:
   fetch-stock-data:
     runs-on: ubuntu-latest
+    environment: stock_usage
+
     
     steps:
     - name: Checkout code
