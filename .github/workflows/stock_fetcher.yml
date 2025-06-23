@@ -15,6 +15,14 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+  
+    - name: Checkout private tools
+      uses: actions/checkout@v4
+      with:
+        repository: zning1994/equity_date_fetching
+        branch: main
+        token: ${{ secrets.PRIVATE_TOEKEN }}
+        path: scripts
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -31,11 +39,13 @@ jobs:
     
     - name: Install dependencies
       run: |
+        cd scripts;
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
     - name: Run stock data fetcher
       run: |
+        cd scripts;
         python main.py
       env:
         TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
@@ -56,3 +66,16 @@ jobs:
         name: stock-fetcher-logs
         path: stock_fetcher.log
         retention-days: 30 
+
+    - name: Commit files
+      run: |
+        git config --local user.email "zhn038@gmail.com"
+        git config --local user.name "ZNing"
+        git add .
+        git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
+ 
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
