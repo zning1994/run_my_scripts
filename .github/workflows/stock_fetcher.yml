@@ -2,8 +2,8 @@ name: Stock Data Fetcher
 
 on:
   schedule:
-    # 每个工作日的 UTC 时间 02:00 执行（北京时间 10:00）
-    - cron: '0 2 * * 1-5'
+    # 每个工作日的 UTC 时间 09:00 执行（北京时间 17:00）
+    - cron: '0 9 * * 1-5'
   
   # 允许手动触发
   workflow_dispatch:
@@ -68,16 +68,3 @@ jobs:
         name: stock-fetcher-logs
         path: stock_fetcher.log
         retention-days: 30 
-
-    - name: Commit files
-      run: |
-        git config --local user.email "zhn038@gmail.com"
-        git config --local user.name "ZNing"
-        git add .
-        git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
- 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
