@@ -10,7 +10,8 @@ on:
 
 jobs:
   fetch-stock-data:
-    runs-on: ubuntu-latest
+    # Pin the OS so future ubuntu-latest migrations do not change this job.
+    runs-on: ubuntu-24.04
     environment: stock_usage
 
     
@@ -22,22 +23,16 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: zning1994/equity_date_fetching
-        branch: main
+        ref: main
         token: ${{ secrets.PRIVATE_TOEKEN }}
         path: scripts
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
-        python-version: '3.9'
-    
-    - name: Cache pip dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+        python-version: '3.13'
+        cache: 'pip'
+        cache-dependency-path: scripts/requirements.txt
     
     - name: Install dependencies
       run: |
